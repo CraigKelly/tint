@@ -1,8 +1,9 @@
 package main
 
-import "unicode"
-
-// TODO: unit test for all of the below
+import (
+	"io/ioutil"
+	"unicode"
+)
 
 type lineEntry struct {
 	start int
@@ -12,17 +13,24 @@ type lineEntry struct {
 // FileMap is a simple ytpe to hold the text of a file
 // It includes a mapping from offset to line/col
 type FileMap struct {
-	Text  string
-	Lines []lineEntry
+	Filename string
+	Text     string
+	Lines    []lineEntry
 }
 
 // NewFileMap creates a File Map, complete with pre-loaded line entries to
 // map from offset to (row,col) coordinates.
-// TODO: creation from file path instead of buffer
-func NewFileMap(buf string) *FileMap {
+func NewFileMap(filename string) (*FileMap, error) {
+	bufb, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	buf := string(bufb)
 	fm := FileMap{
-		Text:  buf,
-		Lines: make([]lineEntry, 0, (len(buf)/32)+1),
+		Filename: filename,
+		Text:     buf,
+		Lines:    make([]lineEntry, 0, (len(buf)/32)+1),
 	}
 
 	// create lines
@@ -41,7 +49,7 @@ func NewFileMap(buf string) *FileMap {
 		fm.Lines = append(fm.Lines, lineEntry{begin, end})
 	}
 
-	return &fm
+	return &fm, nil
 }
 
 // FindOffset returns ZERO-BASED (row, col) numbers for the given offset
@@ -52,7 +60,7 @@ func (fm *FileMap) FindOffset(offset int) (int, int) {
 
 	if offset >= len(fm.Text)-1 {
 		r := len(fm.Lines) - 1
-		c := fm.Lines[r].end - r
+		c := fm.Lines[r].end - fm.Lines[r].start
 		return r, c
 	}
 
