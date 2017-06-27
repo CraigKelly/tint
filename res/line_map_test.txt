@@ -1,0 +1,12 @@
+This file is for testing our line mapping code. There are 3 letters for
+testing:
+
+1. upper case x, which will alternatively be at even then odd 1-based col
+   positions
+2. upper case y, which is the inverse of x
+3. upper case z, which will NEVER be used.
+
+XYXYX
+YXYXY
+XYXYX
+YXYXY
