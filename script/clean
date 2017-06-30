@@ -3,4 +3,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR/.."
 
-go clean -i 
+echo "go clean"
+go clean -i
+echo "dmk -c"
+dmk -c
