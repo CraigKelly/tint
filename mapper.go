@@ -65,17 +65,12 @@ func (fm *FileMap) FindOffset(offset int) (int, int) {
 		return r, c
 	}
 
-	// TODO: use sort.Search instead of our crap linear scan
-	/*for i, le := range fm.Lines {
-		if offset >= le.start && offset <= le.end {
-			return i, offset - le.start
-		}
-	}*/
-	// Find smallest index such offset occurs after the beginning of the line
+    // Find smallest index such that offset occurs before the end of the line
 	idx := sort.Search(len(fm.Lines), func(i int) bool {
 		return offset <= fm.Lines[i].end
 	})
-	// Did we actually find the correct line?
+	// Insure line finding is working - note we've already checked boundary case
+    // offsets above, so if we fail here, it's a full-on bug
 	if idx < len(fm.Lines) {
 		le := fm.Lines[idx]
 		if offset >= le.start && offset <= le.end {
