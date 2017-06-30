@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"sort"
 	"unicode"
 )
 
@@ -65,9 +66,20 @@ func (fm *FileMap) FindOffset(offset int) (int, int) {
 	}
 
 	// TODO: use sort.Search instead of our crap linear scan
-	for i, le := range fm.Lines {
+	/*for i, le := range fm.Lines {
 		if offset >= le.start && offset <= le.end {
 			return i, offset - le.start
+		}
+	}*/
+	// Find smallest index such offset occurs after the beginning of the line
+	idx := sort.Search(len(fm.Lines), func(i int) bool {
+		return offset <= fm.Lines[i].end
+	})
+	// Did we actually find the correct line?
+	if idx < len(fm.Lines) {
+		le := fm.Lines[idx]
+		if offset >= le.start && offset <= le.end {
+			return idx, offset - le.start
 		}
 	}
 
