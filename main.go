@@ -6,39 +6,21 @@ import (
 	"sync"
 )
 
-// TODO: need actual checks...
-
-// Warning emitted by a checker for a file
-type Warning struct {
-	Filename string
-	Offset   int
-	Row      int
-	Col      int
-	Msg      string
-}
-
-// NewWarning creates a warning, complete with formatting
-func NewWarning(fm *FileMap, offset int, msgf string, args ...interface{}) *Warning {
-	r, c := fm.FindOffset(offset)
-	msg := fmt.Sprintf(msgf, args...)
-	w := Warning{
-		Filename: fm.Filename,
-		Offset:   offset,
-		Row:      r,
-		Col:      c,
-		Msg:      msg,
-	}
-	return &w
-}
+// TODO: more checks
 
 func processFile(filename string, report chan *Warning) int {
 	fm, err := NewFileMap(filename)
 	check(err)
+
 	count := 0
-	for _, sidx := range IndexAll(fm.Text, "X") {
-		report <- NewWarning(fm, sidx, "Found an X at offset %d!", sidx)
-		count++
+
+	for _, term := range ShouldNotExist() {
+		for _, warn := range term.Match(fm) {
+			report <- warn
+			count++
+		}
 	}
+
 	return count
 }
 
@@ -63,7 +45,7 @@ func main() {
 	// TODO: select output format on command line
 	// TODO: max warnings per file
 	// TODO: max warnings overall
-	// TODO: sort warnings before output
+	// TODO: option to sort warnings before output
 	for warn := range report {
 		fmt.Printf("%s:%d:%d:warning: %s\n",
 			warn.Filename, warn.Row+1, warn.Col+1, warn.Msg,

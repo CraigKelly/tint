@@ -1,11 +1,32 @@
 package main
 
+import (
+	"regexp"
+)
+
 // TODO: add to main.go and get some test files
 // TODO: more checks: last was corporate_speaj
 
 type BadTerm struct {
 	SearchTerm string
 	Message    string
+}
+
+// Match checks test for SearchTerm and returns all matches found
+func (bt *BadTerm) Match(fm *FileMap) []*Warning {
+	rx := regexp.MustCompile(bt.SearchTerm)
+	var found [][]int
+	found = rx.FindAllStringIndex(fm.CheckText, -1)
+	if found == nil {
+		return nil
+	}
+
+	ret := make([]*Warning, 0, len(found))
+	for _, loc := range found {
+		ret = append(ret, NewWarning(fm, loc[0], bt.Message, fm.Text[loc[0]:loc[1]]))
+	}
+
+	return ret
 }
 
 // ShouldNotExist returns a slice of BadTerm's, none of which should be in the
@@ -23,7 +44,7 @@ func ShouldNotExist() []*BadTerm {
 		{"fulsome", "'%s' has issues - rephrase."},
 		{"hopefully", "'%s' has issues - rephrase."},
 		{"impassionate", "'%s' has issues - rephrase."},
-		{"Thankfully,", "'%s' has issues - rephrase."},
+		{"thankfully,", "'%s' has issues - rephrase."},
 
 		// Airlinese
 		{"enplan(ed|e|ing|ement)", "'%s' is airlinese."},
@@ -41,7 +62,7 @@ func ShouldNotExist() []*BadTerm {
 		{"camarade", "'%s' is archaic."},
 		{"chiefer", "'%s' is archaic."},
 		{"chiefest", "'%s' is archaic."},
-		{"Christiana", "'%s' is archaic."},
+		{"christiana", "'%s' is archaic."},
 		{"completely obsolescent", "'%s' is archaic."},
 		{"cozen", "'%s' is archaic."},
 		{"divers", "'%s' is archaic."},
@@ -81,65 +102,38 @@ func ShouldNotExist() []*BadTerm {
 		// Cliches are bad but all's well that ends well
 		{"all hell broke loose", "'%s' is a cliche."},
 
-        // Corporate speak
-        {"at the end of the day", "Minimize corporatism like '%s'",
-        {"back to the drawing board", "Minimize corporatism like '%s'",
-        {"hit the ground running", "Minimize corporatism like '%s'",
-        {"get the ball rolling", "Minimize corporatism like '%s'",
-        {"low-hanging fruit", "Minimize corporatism like '%s'",
-        {"thrown under the bus", "Minimize corporatism like '%s'",
-        {"think outside the box", "Minimize corporatism like '%s'",
-        {"touch base", "Minimize corporatism like '%s'",
-        {"get my manager's blessing", "Minimize corporatism like '%s'",
-        {"it's on my radar", "Minimize corporatism like '%s'",
-        {"ping me", "Minimize corporatism like '%s'",
-        {"i don't have the bandwidth", "Minimize corporatism like '%s'",
-        {"no brainer", "Minimize corporatism like '%s'",
-        {"par for the course", "Minimize corporatism like '%s'",
-        {"bang for (the|your) buck", "Minimize corporatism like '%s'",
-        {"synerg(y|istic)", "Minimize corporatism like '%s'",
-        {"apples to apples", "Minimize corporatism like '%s'",
-        {"win-win", "Minimize corporatism like '%s'",
-        {"circle back around", "Minimize corporatism like '%s'",
-        {"all hands on deck", "Minimize corporatism like '%s'",
-        {"drill-down", "Minimize corporatism like '%s'",
-        {"elephant in the room", "Minimize corporatism like '%s'",
+		// Corporate speak
+		{"at the end of the day", "Minimize corporatism like '%s'"},
+		{"back to the drawing board", "Minimize corporatism like '%s'"},
+		{"hit the ground running", "Minimize corporatism like '%s'"},
+		{"get the ball rolling", "Minimize corporatism like '%s'"},
+		{"low-hanging fruit", "Minimize corporatism like '%s'"},
+		{"thrown under the bus", "Minimize corporatism like '%s'"},
+		{"think outside the box", "Minimize corporatism like '%s'"},
+		{"touch base", "Minimize corporatism like '%s'"},
+		{"get my manager's blessing", "Minimize corporatism like '%s'"},
+		{"it's on my radar", "Minimize corporatism like '%s'"},
+		{"ping me", "Minimize corporatism like '%s'"},
+		{"i don't have the bandwidth", "Minimize corporatism like '%s'"},
+		{"no brainer", "Minimize corporatism like '%s'"},
+		{"par for the course", "Minimize corporatism like '%s'"},
+		{"bang for (the|your) buck", "Minimize corporatism like '%s'"},
+		{"synerg(y|istic)", "Minimize corporatism like '%s'"},
+		{"apples to apples", "Minimize corporatism like '%s'"},
+		{"win-win", "Minimize corporatism like '%s'"},
+		{"circle back around", "Minimize corporatism like '%s'"},
+		{"all hands on deck", "Minimize corporatism like '%s'"},
+		{"drill-down", "Minimize corporatism like '%s'"},
+		{"elephant in the room", "Minimize corporatism like '%s'"},
 	}
 }
-
-/*
- * TODO: here is our simple match checking for use with bt.Searcher
- * (once it's been lazily created)
-func match(r string, test string) {
-	fmt.Printf("'%s' :|> '%s' ==> ", test, r)
-	rx := regexp.MustCompile(r)
-	var found [][]int
-	found = rx.FindAllStringIndex(test, -1)
-	if found == nil {
-		fmt.Printf("NOTHING FOUND")
-	} else {
-		for _, loc := range found {
-			fmt.Printf("[%d, %d]='%s' ", loc[0], loc[1], test[loc[0]:loc[1]])
-		}
-	}
-	fmt.Println("")
-}
-
-func main() {
-	match("enplan(ed|e|ing)", "enplan")
-	match("enplan(ed|e|ing)", "enplane")
-	match("enplan(ed|e|ing)", "enplaned")
-	match("enplan(ed|e|ing)", "enplaning")
-	match("enplan(ed|e|ing)", "ing")
-}
-*/
 
 /*
  * TODO: there are a LOT of cliches... do we want them all or their package or...
-	"American as apple pie",
-	"Hobson's choice",
+	"american as apple pie",
+	"hobson's choice",
 	"I beg to differ",
-	"Jack of all trades",
+	"jack of all trades",
 	"a chip off the old block",
 	"a clean slate",
 	"a dark and stormy night",

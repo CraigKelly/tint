@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"sort"
+	"strings"
 	"unicode"
 )
 
@@ -13,10 +14,15 @@ type lineEntry struct {
 
 // FileMap is a simple ytpe to hold the text of a file
 // It includes a mapping from offset to line/col
+// Text is the actual text read from the file, while CheckText is the
+// processed text used for searching. Mainly it is set to lower case
+// by convention so that our checks are faster. Doing this with regex's
+// instead of the (?i) flag is an order of magnitude faster.
 type FileMap struct {
-	Filename string
-	Text     string
-	Lines    []lineEntry
+	Filename  string
+	Text      string
+	CheckText string
+	Lines     []lineEntry
 }
 
 // NewFileMap creates a File Map, complete with pre-loaded line entries to
@@ -29,9 +35,10 @@ func NewFileMap(filename string) (*FileMap, error) {
 
 	buf := string(bufb)
 	fm := FileMap{
-		Filename: filename,
-		Text:     buf,
-		Lines:    make([]lineEntry, 0, (len(buf)/32)+1),
+		Filename:  filename,
+		Text:      buf,
+		CheckText: strings.ToLower(buf),
+		Lines:     make([]lineEntry, 0, (len(buf)/32)+1),
 	}
 
 	// create lines
