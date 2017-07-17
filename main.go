@@ -42,7 +42,7 @@ func main() {
 	}()
 
 	// TODO: better output
-	// TODO: select output format on command line
+	// TODO: select output format on command line - should include JSON fmt from: http://steelbrain.me/linter/types/linter-message-v2.html
 	// TODO: max warnings per file
 	// TODO: max warnings overall
 	// TODO: option to sort warnings before output
