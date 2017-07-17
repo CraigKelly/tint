@@ -2,6 +2,8 @@ package main
 
 import (
 	"regexp"
+	"unicode"
+	"unicode/utf8"
 )
 
 // TODO: more checks: last was corporate_speak
@@ -10,6 +12,15 @@ import (
 type BadTerm struct {
 	SearchTerm string
 	Message    string
+}
+
+// helper to check for unicode letter at given index
+func indexIsLetter(s string, idx int) bool {
+	if idx < 0 || idx >= len(s) {
+		return false
+	}
+	r, _ := utf8.DecodeRuneInString(s[idx:])
+	return unicode.IsLetter(r)
 }
 
 // Match checks test for SearchTerm and returns all matches found
@@ -23,6 +34,11 @@ func (bt *BadTerm) Match(fm *FileMap) []*Warning {
 
 	ret := make([]*Warning, 0, len(found))
 	for _, loc := range found {
+		// make sure we are at word boundaries
+		if indexIsLetter(fm.Text, loc[0]-1) || indexIsLetter(fm.Text, loc[1]) {
+			continue
+		}
+		// found something
 		ret = append(ret, NewWarning(fm, loc[0], bt.Message, fm.Text[loc[0]:loc[1]]))
 	}
 
@@ -47,8 +63,8 @@ func ShouldNotExist() []*BadTerm {
 		{"thankfully,", "'%s' has issues - rephrase."},
 
 		// Airlinese
-		{"enplan(ed|e|ing|ement)", "'%s' is airlinese."},
-		{"deplan(ed|e|ing|ement)", "'%s' is airlinese."},
+		{"enplan(ed|es|e|ing|ement)", "'%s' is airlinese."},
+		{"deplan(ed|es|e|ing|ement)", "'%s' is airlinese."},
 
 		// Archaic
 		{"alack", "'%s' is archaic."},
