@@ -1,6 +1,7 @@
 package main
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -29,13 +30,39 @@ func TestCornerCaseMapping(t *testing.T) {
 	assertRC(assert, fm, 100000, lineCount, finalCol+1) //1-based
 }
 
+// indexAll returns all indexes in s where sep occurs
+func indexAll(s, sep string) []int {
+	ret := []int{}
+	if len(sep) < 1 {
+		return ret
+	}
+
+	p := 0
+	for p < len(s) {
+		idx := strings.Index(s[p:], sep)
+		if idx < 0 {
+			break
+		}
+
+		if len(ret) < 1 {
+			ret = make([]int, 0, 4)
+		}
+
+		actualIdx := p + idx
+		ret = append(ret, actualIdx)
+		p = actualIdx + len(sep)
+	}
+
+	return ret
+}
+
 func TestBasicFileMapping(t *testing.T) {
 	assert := assert.New(t)
 
 	fm, err := NewFileMap("res/line_map_test.txt")
 	assert.NoError(err)
 
-	xfound := IndexAll(fm.Text, "X")
+	xfound := indexAll(fm.Text, "X")
 	assertRC(assert, fm, xfound[0], 9, 1)
 	assertRC(assert, fm, xfound[1], 9, 3)
 	assertRC(assert, fm, xfound[2], 9, 5)
@@ -47,7 +74,7 @@ func TestBasicFileMapping(t *testing.T) {
 	assertRC(assert, fm, xfound[8], 12, 2)
 	assertRC(assert, fm, xfound[9], 12, 4)
 
-	yfound := IndexAll(fm.Text, "Y")
+	yfound := indexAll(fm.Text, "Y")
 	assertRC(assert, fm, yfound[0], 9, 2)
 	assertRC(assert, fm, yfound[1], 9, 4)
 	assertRC(assert, fm, yfound[2], 10, 1)
