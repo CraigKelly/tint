@@ -4,8 +4,8 @@ import (
 	"regexp"
 )
 
-// TODO: add to main.go and get some test files
-// TODO: more checks: last was corporate_speaj
+// TODO: more checks: last was corporate_speak
+// TODO: issues with word boundaries: but if we update the regex's speed gets destroyed
 
 type BadTerm struct {
 	SearchTerm string
