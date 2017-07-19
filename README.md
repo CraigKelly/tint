@@ -15,7 +15,7 @@ optimizations used:
 
 * A separate "pre-processed" copy of the file text is kept for actual
   searching (the original text is kept for reporting). The only current
-  processing is changing the entire file to lower case so that regexp's
+  processing is changing the entire file to lower case so that regexps
   don't need to be case-insensitive
 * Instead of adding word boundary checking to every regexp that need to
   match entire words, we do post-find boundary checking. See
@@ -31,4 +31,7 @@ tool. See `pipeline.yaml` for details.
 
 `./res` contains resources used for testing.
 
-
+`./helper` contains wrappers around `tint` that you might find interesting.
+For instance, if you have Python 3 with colorclass installed (you can install
+colorclass with pip: `pip3 install --user colorclass`), then you can put tintc
+in your path and the default output will be colored.
