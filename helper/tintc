@@ -1,5 +1,7 @@
 #!/bin/bash
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+SCRIPT_NAME=$(readlink -f "${BASH_SOURCE[0]}")
+sd=$(dirname "${SCRIPT_NAME}")
+SCRIPT_DIR="$( cd "${sd}" && pwd -P )"
 
 tint "$@" | "${SCRIPT_DIR}/tint-color.py"
