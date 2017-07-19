@@ -6,8 +6,10 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: more checks: last was corporate_speak
-// TODO: issues with word boundaries: but if we update the regex's speed gets destroyed
+// TODO: more checks: last was mixed_metaphors
+// TODO: something other than existence checks
+// TODO: special module just for cursing, lgbtq
+// TODO: go through the misc module in proselint checks - it's huge AND we've already done some
 
 type BadTerm struct {
 	SearchTerm string
@@ -141,6 +143,45 @@ func ShouldNotExist() []*BadTerm {
 		{"all hands on deck", "Minimize corporatism like '%s'"},
 		{"drill-down", "Minimize corporatism like '%s'"},
 		{"elephant in the room", "Minimize corporatism like '%s'"},
+
+		// Date/Time
+		{`12 ?[ap]\.?m\.?`, "'%s' can be confusing, use midnight or noon"},
+		{`\d{1,2} ?a\.?m\.? in the morning`, "'%s' is redundant - AM is always morning"},
+		{`\d{1,2} ?p\.?m\.? in the evening`, "'%s' is redundant - PM is always night"},
+		{`\d{1,2} ?p\.?m\.? at night`, "'%s' is redundant - PM is always night"},
+		{`\d{1,2} ?p\.?m\.? in the afternoon`, "'%s' is redundant - PM is always after noon"},
+
+		// Hedging
+		{"I would argue that", "Don't hedge with '%s', just say it"},
+		{"so to speak", "Don't hedge with '%s', just say it"},
+		{"to a certain degree", "Don't hedge with '%s', just say it"},
+
+		// Jargon
+		{"in the affirmative", "'%s' is jargon, say it another way."},
+		{"in the negative", "'%s' is jargon, say it another way."},
+		{"agendize", "'%s' is jargon, say it another way."},
+		{"per your order", "'%s' is jargon, say it another way."},
+		{"per your request", "'%s' is jargon, say it another way."},
+		{"disincentivize", "'%s' is jargon, say it another way."},
+
+		// Lexical illusion
+		{`the\sthe`, "Repeated words - '%s' is probably a lexical illusion"},
+		{`am\sam`, "Repeated words - '%s' is probably a lexical illusion"},
+		{`has\shas`, "Repeated words - '%s' is probably a lexical illusion"},
+
+		// Malapropisms
+		{"the infinitesimal universe", "'%s' is a malapropism"},
+		{"a serial experienc", "'%s' is a malapropism"},
+		{"attack my voracity", "'%s' is a malapropism"},
+
+		// Mixed metaphor: bottle necks
+		{"biggest bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+		{"big bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+		{"large bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+		{"largest bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+		{"world-wide bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+		{"huge bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+		{"massive bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
 	}
 }
 
