@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Use readlink -f to find canonical name of this script, then use dirname to
+# 80 get it's directory, and then finally use pwd -P to get the physical name
+# of that dir.
 SCRIPT_NAME=$(readlink -f "${BASH_SOURCE[0]}")
 sd=$(dirname "${SCRIPT_NAME}")
 SCRIPT_DIR="$( cd "${sd}" && pwd -P )"
