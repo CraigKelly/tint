@@ -17,6 +17,7 @@ if os.name == "nt":
 else:
     colorclass.set_dark_background()
 
+
 def line_process(line):
     """Add any necessary color to the line and return the final, corrected line."""
     # res/small_xist_checks.txt:3:14:warning: 'effete' has issues - rephrase.
@@ -25,14 +26,14 @@ def line_process(line):
         return line  # Not in a format we recognize
 
     clr = colorclass.Color
-    
+
+    # Note that we currently do nothing to msg
     fname, line, col, warn, msg = flds
     fname = clr('{autocyan}%s{/autocyan}' % fname)
     line = clr('{autogreen}%s{/autogreen}' % line)
     col = clr('{autogreen}%s{/autogreen}' % col)
     warn = clr('{autoyellow}%s{/autoyellow}' % warn)
-    # note: msg left alone
-    
+
     delim = clr('{b}:{/b}')
 
     return delim.join([fname, line, col, warn, msg])
