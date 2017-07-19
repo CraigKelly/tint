@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"os"
 	"sync"
 )
@@ -25,10 +27,23 @@ func processFile(filename string, report chan *Warning) int {
 }
 
 func main() {
-	report := make(chan *Warning, 64)
+	// If it should always be printed, we use log. If it should only be printed
+	// verbose=true, then we use verb
+	var verbose = true // TODO: from command line
+	var verb *log.Logger
+	if verbose {
+		verb = log.New(os.Stderr, "", 0)
+	} else {
+		verb = log.New(ioutil.Discard, "", 0)
+	}
+
+	verb.Printf("Verbose mode: ON\n")
+
 	wg := sync.WaitGroup{}
+	report := make(chan *Warning, 64)
 
 	for _, filename := range os.Args[1:] {
+		verb.Printf("FILE: %s\n", filename)
 		wg.Add(1)
 		go func(fn string) {
 			defer wg.Done()
