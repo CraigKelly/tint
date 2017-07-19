@@ -21,3 +21,14 @@ optimizations used:
   match entire words, we do post-find boundary checking. See
   `existence_checks.go` for an example.
 
+## Repo layout
+
+Currently the project is small enough that the command line program and all
+code are right here in a single `main` package.
+
+`./scripts` contains build/development scripts. `dmk` is used as the build
+tool. See `pipeline.yaml` for details.
+
+`./res` contains resources used for testing.
+
+
