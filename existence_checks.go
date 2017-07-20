@@ -6,7 +6,6 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: more checks: last was security
 // TODO: something other than existence checks
 // TODO: special module just for cursing, lgbtq
 // TODO: go through the misc module in proselint checks - it's huge AND we've already done some
@@ -234,6 +233,47 @@ func ShouldNotExist() []*BadTerm {
 		{`35[2-8]\d{13}`, "'%s' appears to be a JCB credit card number. Seriously?"},
 		// Dankort: 5019, 4175, 4571 with len of 16 (note some caught by VISA)
 		{`5019\d{12}`, "'%s' appears to be a Dankort credit card number. Seriously?"},
+
+		// Sexism
+		{"anchorman", "'%s' shows gender bias."},
+		{"anchorwoman", "'%s' shows gender bias."},
+		{"chairman", "'%s' shows gender bias."},
+		{"chairwoman", "'%s' shows gender bias."},
+		{"draftman", "'%s' shows gender bias."},
+		{"draftwoman", "'%s' shows gender bias."},
+		{"ombudsman", "'%s' shows gender bias."},
+		{"ombudswoman", "'%s' shows gender bias."},
+		{"tribesman", "'%s' shows gender bias."},
+		{"tribeswoman", "'%s' shows gender bias."},
+		{"policeman", "'%s' shows gender bias."},
+		{"policewoman", "'%s' shows gender bias."},
+		{"fireman", "'%s' shows gender bias."},
+		{"firewoman", "'%s' shows gender bias."},
+		{"mailman", "'%s' shows gender bias."},
+		{"mailwoman", "'%s' shows gender bias."},
+		{"herstory", "'%s' shows gender bias."},
+		{"womyn", "'%s' shows gender bias."},
+		{"poetess", "'%s' shows gender bias."},
+		{"authoress", "'%s' shows gender bias."},
+		{"waitress", "'%s' shows gender bias."},
+		{"lady lawyer", "'%s' shows gender bias."},
+		{"woman doctor", "'%s' shows gender bias."},
+		{"female booksalesman", "'%s' shows gender bias."},
+		{"female airman", "'%s' shows gender bias."},
+		{"executrix", "'%s' shows gender bias."},
+		{"prosecutrix", "'%s' shows gender bias."},
+		{"testatrix", "'%s' shows gender bias."},
+		{"man and wife", "'%s' shows gender bias."},
+		{"chairmen and chairs", "'%s' shows gender bias."},
+		{"men and girls", "'%s' shows gender bias."},
+		{"comedienne", "'%s' shows gender bias."},
+		{"confidante", "'%s' shows gender bias."},
+		{"woman scientist", "'%s' shows gender bias."},
+		{"women scientists", "'%s' shows gender bias."},
+		{"heroine", "'%s' shows gender bias."},
+
+		// Weasel words
+		{"very", "'%s' is a weasel word"},
 	}
 }
 

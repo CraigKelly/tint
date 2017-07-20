@@ -10,7 +10,8 @@ import (
 	"sync"
 )
 
-// TODO: more checks
+// TODO: go over preferred form and other not-exist-checks and use them
+// TODO: look at write good and alex, especially passive voice detection
 
 func processFile(filename string, report chan *Warning) int {
 	fm, err := NewFileMap(filename)
