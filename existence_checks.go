@@ -6,9 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: something other than existence checks
 // TODO: special module just for cursing, lgbtq
-// TODO: go through the misc module in proselint checks - it's huge AND we've already done some
 
 type BadTerm struct {
 	SearchTerm string
@@ -142,6 +140,7 @@ func ShouldNotExist() []*BadTerm {
 		{"all hands on deck", "Minimize corporatism like '%s'"},
 		{"drill-down", "Minimize corporatism like '%s'"},
 		{"elephant in the room", "Minimize corporatism like '%s'"},
+		{"meets? with your approval", "'%s' is bureaucratese."},
 
 		// Date/Time
 		{`12 ?[ap]\.?m\.?`, "'%s' can be confusing, use midnight or noon"},
@@ -162,6 +161,10 @@ func ShouldNotExist() []*BadTerm {
 		{"per your order", "'%s' is jargon, say it another way."},
 		{"per your request", "'%s' is jargon, say it another way."},
 		{"disincentivize", "'%s' is jargon, say it another way."},
+		{"reconceptualize", "'%s' is jargon and the hallmark of a pretentious ass."},
+		{"demassification", "'%s' is jargon and the hallmark of a pretentious ass."},
+		{"attitudinally", "'%s' is jargon and the hallmark of a pretentious ass unless you are making a specific kind of geometricpoint."},
+		{"judgementally", "'%s' is jargon and the hallmark of a pretentious ass."},
 
 		// Lexical illusion
 		{`the\sthe`, "Repeated words - '%s' is probably a lexical illusion"},
@@ -274,6 +277,90 @@ func ShouldNotExist() []*BadTerm {
 
 		// Weasel words
 		{"very", "'%s' is a weasel word"},
+
+		// Not words
+		{"doubtlessly", "'%s' is not a word."},
+		{"analyzation", "'%s' is not a word."},
+		{"annoyment", "'%s' is not a word."},
+		{"confirmant", "'%s' is not a word."},
+		{"confirmants", "'%s' is not a word."},
+		{"conversate", "'%s' is not a word."},
+		{"crained", "'%s' is not a word."},
+		{"dispersement", "'%s' is not a word."},
+		{"discomforture", "'%s' is not a word."},
+		{"affrontery", "'%s' is not a word."},
+		{"forebearance", "'%s' is not a word."},
+		{"improprietous", "'%s' is not a word."},
+		{"inclimate", "'%s' is not a word."},
+		{"relative inexpense", "'%s' is not a word."},
+		{"inimicable", "'%s' is not a word."},
+		{"irregardless", "'%s' is not a word."},
+		{"minimalize", "'%s' is not a word."},
+		{"minimalized", "'%s' is not a word."},
+		{"minimalizes", "'%s' is not a word."},
+		{"minimalizing", "'%s' is not a word."},
+		{"optimalize", "'%s' is not a word."},
+		{"paralyzation", "'%s' is not a word."},
+		{"pettifogger", "'%s' is not a word."},
+		{"proprietous", "'%s' is not a word."},
+		{"squelch", "'%s' is not a word."},
+		{"seldomly", "'%s' is not a word."},
+		{"thusly", "'%s' is not a word."},
+		{"uncategorically", "'%s' is not a word."},
+		{"undoubtably", "'%s' is not a word."},
+		{"unequivocable", "'%s' is not a word."},
+		{"unmercilessly", "'%s' is not a word."},
+		{"unrelentlessly", "'%s' is not a word."},
+
+		// Bad usage
+		{`et\. al\.?`, "'%s' has misplaced punctuation. It is 'et al'"},
+		{"suddenly,", "'%s' slows the action and warns your reader."},
+		{"a not unjustifiable assumption", "'%s' is considered bad usage."},
+		{"leaves much to be desired", "'%s' is considered bad usage."},
+		{"would serve no purpose", "'%s' is considered bad usage."},
+		{"a consideration which we should do well to bear in mind", "'%s' is considered bad usage."},
+		{"obviously", "Do not use '%s'"},
+		{"utilize", "Do not use '%s'"},
+		{"inferior to", "'%s' is not a true comparative. Use 'to' instead of 'than'"},
+		{"superior to", "'%s' is not a true comparative. Use 'to' instead of 'than'"},
+		{"not guilty beyond (a |any )?reasonable doubt", "Avoid '%s' unless you are a lawyer and a copy-editor. Almost always a miscue."},
+		{"between you and i", "Don't use '%s'."},
+		{"on accident", "Don't use '%s'."},
+		{"somewhat of a", "Don't use '%s'."},
+		{"all it'?s own", "Don't use '%s'."},
+		{"reason is because", "Don't use '%s'."},
+		{"audible to the ear", "Don't use '%s'."},
+		{"in regards to", "Don't use '%s'."},
+		{"would of", "Don't use '%s'."},
+		{"i ?(?:feel|am feeling|am|'m|'m feeling) nauseous", "Don't use '%s'. Also reconsider using nauseated."},
+		{"from whence", "You don't need 'from' in '%s'."},
+
+		// False plurals
+		{"many kudos", "'%s' is incorrect - kudos is singular."},
+		{"talismen", "'%s' is an incorrect plural"},
+		{"phenomenons", "'%s' is an incorrect plural"},
+
+		// Illogics
+		{"preplan", "'%s' makes no sense"},
+		{"appraisal valuations?", "'%s' makes no sense"},
+		{"(?:i|you|he|she|it|y'all|all y'all|you all|they) could care less", "'%s' makes no sense"},
+		{"least worst", "'%s' makes no sense"},
+		{"much-needed gaps?", "'%s' makes no sense"},
+		{"much-needed voids?", "'%s' makes no sense"},
+		{"no longer requires oxygen", "'%s' makes no sense"},
+		{"without scarcely", "'%s' makes no sense"},
+		{"to coin a phrase from", "'%s' makes no sense. Did you mean 'borrow'?"},
+		{"without your collusion", "'%s' makes no sense. Did you you mean 'acquiescence'?"},
+
+		// Metadiscourse
+		{"the preceeding discussion", "'%s' is metadiscourse. Avoid it."},
+		{"the rest of this article", "'%s' is metadiscourse. Avoid it."},
+		{"this chapter discusses", "'%s' is metadiscourse. Avoid it."},
+		{"the preceding paragraph demonstrated", "'%s' is metadiscourse. Avoid it."},
+		{"the previous section analyzed", "'%s' is metadiscourse. Avoid it."},
+
+		// Waxing X requires X=adjective, not adverb (so you wax enthusiastic)
+		{"wax(es|ed|ing)? [[:alpha:]]+ly", "'%s' is incorrect - use an adjective instead of an adverb."},
 	}
 }
 
