@@ -8,6 +8,8 @@ import (
 
 // TODO: special module just for cursing, lgbtq
 
+// BadTerm represents a single failed existence check and supports matching
+// (using a FileMap) via the Match function.
 type BadTerm struct {
 	SearchTerm string
 	Message    string
@@ -25,8 +27,7 @@ func indexIsWordChar(s string, idx int) bool {
 // Match checks test for SearchTerm and returns all matches found
 func (bt *BadTerm) Match(fm *FileMap) []*Warning {
 	rx := regexp.MustCompile(bt.SearchTerm)
-	var found [][]int
-	found = rx.FindAllStringIndex(fm.CheckText, -1)
+	found := rx.FindAllStringIndex(fm.CheckText, -1)
 	if found == nil {
 		return nil
 	}

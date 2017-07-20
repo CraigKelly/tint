@@ -25,7 +25,8 @@ func NewWarning(fm *FileMap, offset int, msgf string, args ...interface{}) *Warn
 	return &w
 }
 
-// Default sort order (used for output)
+// WarningDefSort provides our default sort order for output: ascending
+// by (File Name, File Position)
 type WarningDefSort []*Warning
 
 func (a WarningDefSort) Len() int {
