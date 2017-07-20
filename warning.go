@@ -24,3 +24,25 @@ func NewWarning(fm *FileMap, offset int, msgf string, args ...interface{}) *Warn
 	}
 	return &w
 }
+
+// Default sort order (used for output)
+type WarningDefSort []*Warning
+
+func (a WarningDefSort) Len() int {
+	return len(a)
+}
+
+func (a WarningDefSort) Swap(i int, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func (a WarningDefSort) Less(i int, j int) bool {
+	if a[i].Filename < a[j].Filename {
+		return true
+	}
+	if a[i].Filename > a[j].Filename {
+		return false
+	}
+
+	return a[i].Offset < a[j].Offset
+}

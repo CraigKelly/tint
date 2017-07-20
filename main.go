@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"sort"
 	"sync"
 )
 
@@ -27,22 +29,34 @@ func processFile(filename string, report chan *Warning) int {
 }
 
 func main() {
-	// If it should always be printed, we use log. If it should only be printed
+	flags := flag.NewFlagSet("tint", flag.ExitOnError)
+	verbosePtr := flags.Bool("v", false, "Verbose output (written to stderr")
+	sortPtr := flags.Bool("s", false, "Sort output (by file name, line number, column number")
+	jsonPtr := flags.Bool("j", false, "Use JSON output instead of default")
+	check(flags.Parse(os.Args[1:]))
+	args := flags.Args()
+
+	// TODO: JSON fmt from: http://steelbrain.me/linter/types/linter-message-v2.html
+	if *jsonPtr {
+		panic("JSON output not implemented")
+	}
+
+	// If it should always be printed, we use log. If it should only be printed when
 	// verbose=true, then we use verb
-	var verbose = true // TODO: from command line
 	var verb *log.Logger
-	if verbose {
+	if *verbosePtr {
 		verb = log.New(os.Stderr, "", 0)
 	} else {
 		verb = log.New(ioutil.Discard, "", 0)
 	}
 
-	verb.Printf("Verbose mode: ON\n")
+	verb.Printf("Verbose: %v\n", *verbosePtr)
+	verb.Printf("Sort: %v\n", *sortPtr)
 
 	wg := sync.WaitGroup{}
 	report := make(chan *Warning, 64)
 
-	for _, filename := range os.Args[1:] {
+	for _, filename := range args {
 		verb.Printf("FILE: %s\n", filename)
 		wg.Add(1)
 		go func(fn string) {
@@ -56,12 +70,36 @@ func main() {
 		close(report)
 	}()
 
-	// TODO: better output
-	// TODO: select output format on command line - should include JSON fmt from: http://steelbrain.me/linter/types/linter-message-v2.html
 	// TODO: max warnings per file
 	// TODO: max warnings overall
-	// TODO: option to sort warnings before output
-	for warn := range report {
+
+	// Final output channel might be filtered by sort or count options
+	output := report
+
+	// Sort filter
+	if *sortPtr {
+		sortInput := output
+		output = make(chan *Warning, 64)
+
+		go func(out chan *Warning) {
+			defer close(out)
+
+			warnings := make([]*Warning, 0, 128)
+			for warn := range sortInput {
+				warnings = append(warnings, warn)
+			}
+
+			verb.Printf("Sorting %d warnings\n", len(warnings))
+			sort.Sort(WarningDefSort(warnings))
+
+			for _, warn := range warnings {
+				out <- warn
+			}
+		}(output)
+	}
+
+	// Output all warnings
+	for warn := range output {
 		fmt.Printf("%s:%d:%d:warning: %s\n",
 			warn.Filename, warn.Row+1, warn.Col+1, warn.Msg,
 		)

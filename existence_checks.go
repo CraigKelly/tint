@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: more checks: last was mixed_metaphors
+// TODO: more checks: last was security
 // TODO: something other than existence checks
 // TODO: special module just for cursing, lgbtq
 // TODO: go through the misc module in proselint checks - it's huge AND we've already done some
@@ -17,12 +17,12 @@ type BadTerm struct {
 }
 
 // helper to check for unicode letter at given index
-func indexIsLetter(s string, idx int) bool {
+func indexIsWordChar(s string, idx int) bool {
 	if idx < 0 || idx >= len(s) {
 		return false
 	}
 	r, _ := utf8.DecodeRuneInString(s[idx:])
-	return unicode.IsLetter(r)
+	return unicode.IsLetter(r) || unicode.IsDigit(r)
 }
 
 // Match checks test for SearchTerm and returns all matches found
@@ -37,7 +37,7 @@ func (bt *BadTerm) Match(fm *FileMap) []*Warning {
 	ret := make([]*Warning, 0, len(found))
 	for _, loc := range found {
 		// make sure we are at word boundaries
-		if indexIsLetter(fm.Text, loc[0]-1) || indexIsLetter(fm.Text, loc[1]) {
+		if indexIsWordChar(fm.Text, loc[0]-1) || indexIsWordChar(fm.Text, loc[1]) {
 			continue
 		}
 		// found something
@@ -117,7 +117,7 @@ func ShouldNotExist() []*BadTerm {
 		{"forewent", "'%s' is archaic."},
 		{"for ever", "'%s' is archaic."},
 
-		// Cliches are bad but all's well that ends well
+		// Cliches are bad but all's well that ends well (see todo below: going to own module)
 		{"all hell broke loose", "'%s' is a cliche."},
 
 		// Corporate speak
@@ -182,8 +182,62 @@ func ShouldNotExist() []*BadTerm {
 		{"world-wide bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
 		{"huge bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
 		{"massive bottleneck", "'%s' is a mixed metaphor - bottle with big necks are easy to pass through"},
+
+		// Oxymorons
+		{"amateur expert", "'%s' is an oxymoron"},
+		{"increasingly less", "'%s' is an oxymoron"},
+		{"advancing backwards?", "'%s' is an oxymoron"},
+		{"alludes explicitly to", "'%s' is an oxymoron"},
+		{"explicitly alludes to", "'%s' is an oxymoron"},
+		{"totally obsolescent", "'%s' is an oxymoron"},
+		{"completely obsolescent", "'%s' is an oxymoron"},
+		{"generally always", "'%s' is an oxymoron"},
+		{"usually always", "'%s' is an oxymoron"},
+		{"increasingly less", "'%s' is an oxymoron"},
+		{"build down", "'%s' is an oxymoron"},
+		{"conspicuous absence", "'%s' is an oxymoron"},
+		{"exact estimate", "'%s' is an oxymoron"},
+		{"found missing", "'%s' is an oxymoron"},
+		{"intense apathy", "'%s' is an oxymoron"},
+		{"mandatory choice", "'%s' is an oxymoron"},
+		{"nonworking mother", "'%s' is an oxymoron"},
+		{"organized mess", "'%s' is an oxymoron"},
+
+		// Redundancy (see todo below: eventually move to own module)
+		{"mental telepathy", "'%s' is redundant."},
+
+		// Psychology
+		{`p ?\= ?0\.0+`, "Unless '%s' really means zero you should use more decimal places."},
+
+		// Security - credit card numbers don't need to be in text. Patterns from proselint
+		// and the IIN section of https://en.wikipedia.org/wiki/Payment_card_number
+		// VISA: start with 4 and have length of 13, 16, 19
+		{`4\d{12}`, "'%s' appears to be a VISA credit card number. Seriously?"},
+		{`4\d{15}`, "'%s' appears to be a VISA credit card number. Seriously?"},
+		{`4\d{18}`, "'%s' appears to be a VISA credit card number. Seriously?"},
+		// MasterCard: 2221-2720 or 51-55 with 16 digits
+		{`2[2-7]\d{14}`, "'%s' appears to be a MasterCard credit card number. Seriously?"},
+		{`5[1-5]\d{14}`, "'%s' appears to be a MasterCard credit card number. Seriously?"},
+		// AmEx 34,37 with 15 digits
+		{`3[4,7]\d{13}`, "'%s' appears to be an AmEx credit card number. Seriously?"},
+		{`3[0,6,8]\d{12}`, "'%s' appears to be an AmEx credit card number. Seriously?"},
+		// Discover: 6011, 622126-622925, 644-649, 65 with len of 16 or 19
+		{`6011\d{12}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`6011\d{15}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`622\d{13}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`622\d{16}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`64[4-9]\d{13}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`64[4-9]\d{16}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`65\d{14}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		{`65\d{17}`, "'%s' appears to be a Discover credit card number. Seriously?"},
+		// JCB: 3528-3589 with len of 16
+		{`35[2-8]\d{13}`, "'%s' appears to be a JCB credit card number. Seriously?"},
+		// Dankort: 5019, 4175, 4571 with len of 16 (note some caught by VISA)
+		{`5019\d{12}`, "'%s' appears to be a Dankort credit card number. Seriously?"},
 	}
 }
+
+// TODO: see redundancy - it's almost as big as cliches: probably needs it's own module as well...
 
 /*
  * TODO: there are a LOT of cliches... do we want them all or their package or...

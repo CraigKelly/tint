@@ -1,0 +1,7 @@
+This is a file to test number patterns.
+
+Chocolate is your friend p = 0.000000.
+p=0.0 Wine will make you live forever.
+My stats are (p=0.0).
+
+This line is fine.
