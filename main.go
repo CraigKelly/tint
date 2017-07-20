@@ -101,7 +101,7 @@ func main() {
 	// Output all warnings
 	for warn := range output {
 		fmt.Printf("%s:%d:%d:warning: %s\n",
-			warn.Filename, warn.Row+1, warn.Col+1, warn.Msg,
+			warn.Filename, warn.Row+1, warn.Col+1, msgEscape(warn.Msg),
 		)
 	}
 }
