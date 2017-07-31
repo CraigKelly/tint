@@ -205,9 +205,6 @@ func ShouldNotExist() []TextCheck {
 		&BadTerm{"nonworking mother", "'%s' is an oxymoron"},
 		&BadTerm{"organized mess", "'%s' is an oxymoron"},
 
-		// Redundancy (see todo below: eventually move to own module)
-		&BadTerm{"mental telepathy", "'%s' is redundant."},
-
 		// Psychology
 		&BadTerm{`p ?\= ?0\.0+`, "Unless '%s' really means zero you should use more decimal places."},
 

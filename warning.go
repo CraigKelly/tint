@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"path/filepath"
+)
 
 // Warning emitted by a checker for a file
 type Warning struct {
@@ -51,4 +55,37 @@ func (a WarningDefSort) Less(i int, j int) bool {
 	}
 
 	return a[i].Offset < a[j].Offset
+}
+
+// JSON representation as per http://steelbrain.me/linter/types/linter-message-v2.html
+type WarningJSON struct {
+	Location WarningLocation `json:"location"`
+	Excerpt  string          `json:"excerpt"`
+	Severity string          `json:"severity"`
+}
+
+type WarningLocation struct {
+	File     string  `json:"file"`
+	Position [][]int `json:"position"`
+}
+
+func (w Warning) CreateJSON() string {
+	p1 := []int{w.Row, w.Col}
+	p2 := []int{w.Row, w.Col}
+
+	fn, err := filepath.Abs(w.Filename)
+	check(err)
+
+	data := WarningJSON{
+		Location: WarningLocation{
+			File:     fn,
+			Position: [][]int{p1, p2},
+		},
+		Excerpt:  w.Msg,
+		Severity: "warning",
+	}
+
+	body, err := json.Marshal(data)
+	check(err)
+	return string(body)
 }

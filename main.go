@@ -58,11 +58,6 @@ func main() {
 	check(flags.Parse(os.Args[1:]))
 	args := flags.Args()
 
-	// TODO: JSON fmt from: http://steelbrain.me/linter/types/linter-message-v2.html
-	if *jsonPtr {
-		panic("JSON output not implemented")
-	}
-
 	// If it should always be printed, we use log. If it should only be printed when
 	// verbose=true, then we use verb
 	var verb *log.Logger
@@ -121,9 +116,20 @@ func main() {
 	}
 
 	// Output all warnings
+	var outputter func(w *Warning)
+	if *jsonPtr {
+		outputter = func(w *Warning) {
+			fmt.Printf("%s\n", w.CreateJSON())
+		}
+	} else {
+		outputter = func(w *Warning) {
+			fmt.Printf("%s:%d:%d:warning: %s\n",
+				w.Filename, w.Row+1, w.Col+1, msgEscape(w.Msg),
+			)
+		}
+	}
+
 	for warn := range output {
-		fmt.Printf("%s:%d:%d:warning: %s\n",
-			warn.Filename, warn.Row+1, warn.Col+1, msgEscape(warn.Msg),
-		)
+		outputter(warn)
 	}
 }
