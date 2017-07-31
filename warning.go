@@ -11,6 +11,11 @@ type Warning struct {
 	Msg      string
 }
 
+// TextCheck is our generic check interface is currently only implemented by BadTerm
+type TextCheck interface {
+	Match(*FileMap) []*Warning
+}
+
 // NewWarning creates a warning, complete with formatting
 func NewWarning(fm *FileMap, offset int, msgf string, args ...interface{}) *Warning {
 	r, c := fm.FindOffset(offset)

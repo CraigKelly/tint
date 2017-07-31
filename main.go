@@ -17,16 +17,37 @@ func processFile(filename string, report chan *Warning) int {
 	fm, err := NewFileMap(filename)
 	check(err)
 
-	count := 0
+	wg := sync.WaitGroup{}
+	counts := make(chan int, 16)
 
-	for _, term := range ShouldNotExist() {
-		for _, warn := range term.Match(fm) {
-			report <- warn
-			count++
-		}
+	launch := func(checks []TextCheck) {
+		wg.Add(1)
+		go func(fm *FileMap, checks []TextCheck) {
+			defer wg.Done()
+			count := 0
+			for _, c := range checks {
+				for _, warn := range c.Match(fm) {
+					report <- warn
+					count += 1
+				}
+			}
+			counts <- count
+		}(fm, checks)
 	}
 
-	return count
+	launch(ShouldNotExist())
+	launch(ShouldNotCliche())
+
+	go func() {
+		wg.Wait()
+		close(counts)
+	}()
+
+	finalCount := 0
+	for c := range counts {
+		finalCount += c
+	}
+	return finalCount
 }
 
 func main() {
