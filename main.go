@@ -10,8 +10,6 @@ import (
 	"sync"
 )
 
-// TODO: look at write good and alex, especially passive voice detection
-
 // TODO: passive voice detection (optional on command line) -- see these:
 //       http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 //       https://github.com/wooorm/retext-passive
@@ -51,6 +49,7 @@ func processFile(filename string, report chan *Warning, maxWarnings int) int {
 	launch(ShouldNotCliche())
 	launch(ShouldNotRedundant())
 	launch(ShouldNotProfane())
+	launch(ShouldNotBias())
 
 	go func() {
 		wg.Wait()

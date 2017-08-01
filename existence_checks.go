@@ -8,8 +8,6 @@ import (
 
 // NEEDCAPS
 
-// TODO: special module just for equality and lgbtq
-
 // BadTerm represents a single failed existence check and supports matching
 // (using a FileMap) via the Match function.
 type BadTerm struct {
@@ -283,6 +281,37 @@ func ShouldNotExist() []TextCheck {
 		&BadTerm{"surprisingly", "'%s' is a weasel word"},
 		&BadTerm{"remarkably", "'%s' is a weasel word"},
 		&BadTerm{"clearly", "'%s' is a weasel word"},
+
+		// Weakens your meaning
+		&BadTerm{"just", "'%s' weakens meaning and should be dropped."},
+		&BadTerm{"maybe", "'%s' weakens meaning and should be dropped."},
+		&BadTerm{"stuff", "'%s' weakens meaning and should be dropped."},
+		&BadTerm{"things", "'%s' weakens meaning and should be dropped."},
+		&BadTerm{"really", "'%s' weakens meaning and should be dropped."},
+		&BadTerm{"severely", "'%s' weakens meaning and should be dropped."},
+		&BadTerm{"all things considered", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"as a matter of fact", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"as far as I'm concerned", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"at the present time", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"because of the fact that", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"by means of", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"by virtue of the fact", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"due to the fact", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"for all intents and purposes", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"for the most part", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"for the purpose of", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"have a tendency to", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in a manner of speaking", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in a very real sense", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in my opinion", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in the case of", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in the final analysis", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in the event that", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in the nature of", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"in the process of", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"it seems that", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"the point I am trying to make", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"what I mean to say is", "'%s' weakens meaning or is redundant. Don't use."},
 
 		// Not words
 		&BadTerm{"doubtlessly", "'%s' is not a word."},
