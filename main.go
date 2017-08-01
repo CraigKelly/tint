@@ -10,10 +10,11 @@ import (
 	"sync"
 )
 
-// TODO: go over preferred form and other not-exist-checks and use them
 // TODO: look at write good and alex, especially passive voice detection
-// TODO: passive voice detection (optional on command line) -- see here:
+
+// TODO: passive voice detection (optional on command line) -- see these:
 //       http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
+//       https://github.com/wooorm/retext-passive
 
 func processFile(filename string, report chan *Warning, maxWarnings int) int {
 	fm, err := NewFileMap(filename)
@@ -49,6 +50,7 @@ func processFile(filename string, report chan *Warning, maxWarnings int) int {
 	launch(ShouldNotExist())
 	launch(ShouldNotCliche())
 	launch(ShouldNotRedundant())
+	launch(ShouldNotProfane())
 
 	go func() {
 		wg.Wait()

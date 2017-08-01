@@ -1,5 +1,7 @@
 package main
 
+// NEEDCAPS
+
 // ShouldNotRedundant returns a slice of BadTerm's, none of which should be in the
 // a text (case insensitive).
 func ShouldNotRedundant() []TextCheck {

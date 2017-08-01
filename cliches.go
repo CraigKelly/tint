@@ -1,5 +1,7 @@
 package main
 
+// NEEDCAPS
+
 func cliche(match string) *BadTerm {
 	return &BadTerm{match, "'%s' is a cliche. Avoid it like the plague."}
 }

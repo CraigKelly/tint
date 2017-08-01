@@ -6,7 +6,9 @@ import (
 	"unicode/utf8"
 )
 
-// TODO: special module just for cursing, lgbtq
+// NEEDCAPS
+
+// TODO: special module just for equality and lgbtq
 
 // BadTerm represents a single failed existence check and supports matching
 // (using a FileMap) via the Match function.

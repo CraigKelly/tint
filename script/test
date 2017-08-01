@@ -15,8 +15,9 @@ echo "go vet"
 go vet || failed
 
 # Note that we use ! so that a grep than finds something fails
+CAP_CHECKS=$(find -maxdepth 1 -name '*.go' -print0 | xargs -0 grep -l NEEDCAPS)
 echo "Looking for BadTerm's with capital letters..."
-grep --color=always -HEn -e 'BadTerm\{\".*[A-Z].*\",' -e 'cliche\(\".*[A-Z].*\"\)' existence_checks.go cliches.go redundancy.go
+grep --color=always -HEn -e 'BadTerm\{\".*[A-Z].*\",' -e 'cliche\(\".*[A-Z].*\"\)' ${CAP_CHECKS}
 GREP_RET=$?
 if [ "$GREP_RET" -eq "0" ]; then
     echo "BadTerm search terms should be all lower case"
@@ -26,4 +27,4 @@ else
 fi
 
 echo "go test"
-go test || failed
+go test -v -race || failed
