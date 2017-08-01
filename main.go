@@ -14,6 +14,8 @@ import (
 //       http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 //       https://github.com/wooorm/retext-passive
 
+// TODO: atom editor plugin for linter (should work with our JSON mode)
+
 func processFile(filename string, report chan *Warning, maxWarnings int) int {
 	fm, err := NewFileMap(filename)
 	check(err)
