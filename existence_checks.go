@@ -274,6 +274,15 @@ func ShouldNotExist() []TextCheck {
 
 		// Weasel words
 		&BadTerm{"very", "'%s' is a weasel word"},
+		&BadTerm{"extremely", "'%s' is a weasel word"},
+		&BadTerm{"various", "'%s' is a weasel word"},
+		&BadTerm{"a number of", "'%s' is a weasel word"},
+		&BadTerm{"fairly", "'%s' is a weasel word"},
+		&BadTerm{"quite", "'%s' is a weasel word"},
+		&BadTerm{"interestingly", "'%s' is a weasel word"},
+		&BadTerm{"surprisingly", "'%s' is a weasel word"},
+		&BadTerm{"remarkably", "'%s' is a weasel word"},
+		&BadTerm{"clearly", "'%s' is a weasel word"},
 
 		// Not words
 		&BadTerm{"doubtlessly", "'%s' is not a word."},

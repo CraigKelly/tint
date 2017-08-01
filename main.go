@@ -12,6 +12,8 @@ import (
 
 // TODO: go over preferred form and other not-exist-checks and use them
 // TODO: look at write good and alex, especially passive voice detection
+// TODO: passive voice detection (optional on command line) -- see here:
+//       http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 
 func processFile(filename string, report chan *Warning) int {
 	fm, err := NewFileMap(filename)
