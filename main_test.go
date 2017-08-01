@@ -20,7 +20,7 @@ func benchmarkFile(fn string, b *testing.B) {
 
 	retCount := 0
 	for n := 0; n < b.N; n++ {
-		retCount += processFile(fn, report)
+		retCount += processFile(fn, report, 0)
 	}
 
 	// All this counting and module-level var storage is to insure that the

@@ -15,25 +15,34 @@ import (
 // TODO: passive voice detection (optional on command line) -- see here:
 //       http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 
-func processFile(filename string, report chan *Warning) int {
+func processFile(filename string, report chan *Warning, maxWarnings int) int {
 	fm, err := NewFileMap(filename)
 	check(err)
 
+	// We launch a goroutine per list of TextChecks and write any warnings to
+	// our gather channel. Then we pump from the gather channel to our caller.
+	// There are many things we go do as we gather the warnings, but currently
+	// this is only used to handle the max warnings per file feature.
 	wg := sync.WaitGroup{}
-	counts := make(chan int, 16)
+	gather := make(chan *Warning, 64)
 
 	launch := func(checks []TextCheck) {
 		wg.Add(1)
+
 		go func(fm *FileMap, checks []TextCheck) {
 			defer wg.Done()
+
 			count := 0
 			for _, c := range checks {
 				for _, warn := range c.Match(fm) {
-					report <- warn
+					gather <- warn
 					count += 1
+					if maxWarnings > 0 && count >= maxWarnings {
+						// optimization: see below for actual maxWarnings work
+						return
+					}
 				}
 			}
-			counts <- count
 		}(fm, checks)
 	}
 
@@ -43,13 +52,20 @@ func processFile(filename string, report chan *Warning) int {
 
 	go func() {
 		wg.Wait()
-		close(counts)
+		close(gather)
 	}()
 
+	// Actually funnel warnings back to caller
 	finalCount := 0
-	for c := range counts {
-		finalCount += c
+
+	for warn := range gather {
+		report <- warn
+		finalCount += 1
+		if maxWarnings > 0 && finalCount >= maxWarnings {
+			break
+		}
 	}
+
 	return finalCount
 }
 
@@ -58,6 +74,8 @@ func main() {
 	verbosePtr := flags.Bool("v", false, "Verbose output (written to stderr")
 	sortPtr := flags.Bool("s", false, "Sort output (by file name, line number, column number")
 	jsonPtr := flags.Bool("j", false, "Use JSON output instead of default")
+	maxAllPtr := flags.Int("max", 0, "Maximum warnings to output")
+	maxFilePtr := flags.Int("filemax", 0, "Maximum warnings per file")
 	check(flags.Parse(os.Args[1:]))
 	args := flags.Args()
 
@@ -81,7 +99,7 @@ func main() {
 		wg.Add(1)
 		go func(fn string) {
 			defer wg.Done()
-			processFile(fn, report)
+			processFile(fn, report, *maxFilePtr)
 		}(filename)
 	}
 
@@ -89,9 +107,6 @@ func main() {
 		wg.Wait()
 		close(report)
 	}()
-
-	// TODO: max warnings per file
-	// TODO: max warnings overall
 
 	// Final output channel might be filtered by sort or count options
 	output := report
@@ -132,7 +147,13 @@ func main() {
 		}
 	}
 
+	written := 0
 	for warn := range output {
 		outputter(warn)
+		written += 1
+		if *maxAllPtr > 0 && written >= *maxAllPtr {
+			verb.Printf("Maximum warnings reached (%d)\n", written)
+			break
+		}
 	}
 }
