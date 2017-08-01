@@ -3,9 +3,27 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR/.."
 
-echo "fmt"
-go fmt
-echo "vet"
-go vet
-echo "test"
-go test
+failed() {
+    echo "FAILURE!"
+    exit 1
+}
+
+echo "go fmt"
+go fmt || failed
+
+echo "go vet"
+go vet || failed
+
+# Note that we use ! so that a grep than finds something fails
+echo "Looking for BadTerm's with capital letters..."
+grep --color=always -HEn -e 'BadTerm\{\".*[A-Z].*\",' -e 'cliche\(\".*[A-Z].*\"\)' existence_checks.go cliches.go redundancy.go
+GREP_RET=$?
+if [ "$GREP_RET" -eq "0" ]; then
+    echo "BadTerm search terms should be all lower case"
+    failed
+else
+    echo "  ...No problems found"
+fi
+
+echo "go test"
+go test || failed

@@ -39,6 +39,7 @@ func processFile(filename string, report chan *Warning) int {
 
 	launch(ShouldNotExist())
 	launch(ShouldNotCliche())
+	launch(ShouldNotRedundant())
 
 	go func() {
 		wg.Wait()

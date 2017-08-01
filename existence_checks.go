@@ -8,8 +8,6 @@ import (
 
 // TODO: special module just for cursing, lgbtq
 
-// TODO: see redundancy - it's almost as big as cliches: probably needs it's own module as well...
-
 // BadTerm represents a single failed existence check and supports matching
 // (using a FileMap) via the Match function.
 type BadTerm struct {
@@ -150,7 +148,7 @@ func ShouldNotExist() []TextCheck {
 		&BadTerm{`\d{1,2} ?p\.?m\.? in the afternoon`, "'%s' is redundant - PM is always after noon"},
 
 		// Hedging
-		&BadTerm{"I would argue that", "Don't hedge with '%s', just say it"},
+		&BadTerm{"i would argue that", "Don't hedge with '%s', just say it"},
 		&BadTerm{"so to speak", "Don't hedge with '%s', just say it"},
 		&BadTerm{"to a certain degree", "Don't hedge with '%s', just say it"},
 
@@ -335,7 +333,6 @@ func ShouldNotExist() []TextCheck {
 		&BadTerm{"somewhat of a", "Don't use '%s'."},
 		&BadTerm{"all it'?s own", "Don't use '%s'."},
 		&BadTerm{"reason is because", "Don't use '%s'."},
-		&BadTerm{"audible to the ear", "Don't use '%s'."},
 		&BadTerm{"in regards to", "Don't use '%s'."},
 		&BadTerm{"would of", "Don't use '%s'."},
 		&BadTerm{"i ?(?:feel|am feeling|am|'m|'m feeling) nauseous", "Don't use '%s'. Also reconsider using nauseated."},
