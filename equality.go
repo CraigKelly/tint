@@ -7,7 +7,6 @@ package main
 func ShouldNotBias() []TextCheck {
 	return []TextCheck{
 		// Ablist
-		&BadTerm{"", "'%s' is ablist."},
 		&BadTerm{"downs syndrome", "'%s' is incorrect. You mean Down Syndrome."},
 		&BadTerm{"ablebodied", "'%s' is ablist."},
 		&BadTerm{"addicts?", "'%s' is ablist."},

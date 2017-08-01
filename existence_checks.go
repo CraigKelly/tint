@@ -291,7 +291,7 @@ func ShouldNotExist() []TextCheck {
 		&BadTerm{"severely", "'%s' weakens meaning and should be dropped."},
 		&BadTerm{"all things considered", "'%s' weakens meaning or is redundant. Don't use."},
 		&BadTerm{"as a matter of fact", "'%s' weakens meaning or is redundant. Don't use."},
-		&BadTerm{"as far as I'm concerned", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"as far as i'm concerned", "'%s' weakens meaning or is redundant. Don't use."},
 		&BadTerm{"at the present time", "'%s' weakens meaning or is redundant. Don't use."},
 		&BadTerm{"because of the fact that", "'%s' weakens meaning or is redundant. Don't use."},
 		&BadTerm{"by means of", "'%s' weakens meaning or is redundant. Don't use."},
@@ -310,8 +310,8 @@ func ShouldNotExist() []TextCheck {
 		&BadTerm{"in the nature of", "'%s' weakens meaning or is redundant. Don't use."},
 		&BadTerm{"in the process of", "'%s' weakens meaning or is redundant. Don't use."},
 		&BadTerm{"it seems that", "'%s' weakens meaning or is redundant. Don't use."},
-		&BadTerm{"the point I am trying to make", "'%s' weakens meaning or is redundant. Don't use."},
-		&BadTerm{"what I mean to say is", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"the point i am trying to make", "'%s' weakens meaning or is redundant. Don't use."},
+		&BadTerm{"what i mean to say is", "'%s' weakens meaning or is redundant. Don't use."},
 
 		// Not words
 		&BadTerm{"doubtlessly", "'%s' is not a word."},
