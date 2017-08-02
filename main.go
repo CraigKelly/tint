@@ -10,10 +10,6 @@ import (
 	"sync"
 )
 
-// TODO: passive voice detection (optional on command line) -- see these:
-//       http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
-//       https://github.com/wooorm/retext-passive
-
 // TODO: atom editor plugin for linter (should work with our JSON mode)
 
 func processFile(filename string, report chan *Warning, maxWarnings int) int {
@@ -52,6 +48,7 @@ func processFile(filename string, report chan *Warning, maxWarnings int) int {
 	launch(ShouldNotRedundant())
 	launch(ShouldNotProfane())
 	launch(ShouldNotBias())
+	launch(ShouldNotPassive())
 
 	go func() {
 		wg.Wait()
