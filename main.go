@@ -10,6 +10,8 @@ import (
 	"sync"
 )
 
+// TODO: thorough spell checking run
+
 // TODO: atom editor plugin for linter (should work with our JSON mode)
 
 func processFile(filename string, report chan *Warning, maxWarnings int) int {
