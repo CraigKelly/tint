@@ -201,8 +201,8 @@ func ShouldNotBias() []TextCheck {
 		&BadTerm{"islamists?", "'%s' is inconsiderate. Use either Muslims (or people of Islamic faith) OR fanatic/zealot depending on your meaning."},
 
 		// Race
-		&BadTerm{"masters?", "'%s' is imappropriate. Consider primary/replica, hub/spoke, or some other metaphor."},
-		&BadTerm{"slaves?", "'%s' is imappropriate. Consider primary/replica, hub/spoke, or some other metaphor."},
+		&BadTerm{"masters?", "'%s' is inappropriate. Consider primary/replica, hub/spoke, or some other metaphor."},
+		&BadTerm{"slaves?", "'%s' is inappropriate. Consider primary/replica, hub/spoke, or some other metaphor."},
 		&BadTerm{"eskimos?", "'%s' is inappropriate. You mean Inuit"},
 		&BadTerm{"orientals?", "'%s' is inappropriate. You mean Asian"},
 		&BadTerm{"nonwhite", "'%s' is inappropriate. You mean person/people of color."},

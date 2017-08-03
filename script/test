@@ -27,4 +27,4 @@ else
 fi
 
 echo "go test"
-go test -v -race || failed
+go test -race || failed
