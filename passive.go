@@ -31,7 +31,7 @@ func (pt *PassiveTerm) Match(fm *FileMap) []*Warning {
 			prev_end -= 1
 		}
 		prev_start := prev_end - 1
-		for prev_start >= 0 && !indexIsWordChar(fm.CheckText, prev_start) {
+		for prev_start >= 0 && indexIsWordChar(fm.CheckText, prev_start) {
 			prev_start -= 1
 		}
 		if prev_start < 0 || prev_end < 0 {

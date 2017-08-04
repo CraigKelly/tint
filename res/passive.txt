@@ -1,1 +1,3 @@
  I am beat.
+
+ Program told me this sentence isn't passive.
