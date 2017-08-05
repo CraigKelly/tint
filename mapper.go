@@ -5,6 +5,8 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+
+	"github.com/mvdan/xurls"
 )
 
 type lineEntry struct {
@@ -12,7 +14,7 @@ type lineEntry struct {
 	end   int
 }
 
-// FileMap is a simple ytpe to hold the text of a file
+// FileMap is a simple type to hold the text of a file
 // It includes a mapping from offset to line/col
 // Text is the actual text read from the file, while CheckText is the
 // processed text used for searching. Mainly it is set to lower case
@@ -23,6 +25,22 @@ type FileMap struct {
 	Text      string
 	CheckText string
 	Lines     []lineEntry
+}
+
+// createCheckText returns a string that is suitable for fast searching. The
+// returned string will be the same length as the source string.
+func createCheckText(text string) string {
+	// Always lower case the string so we don't need case-insensitive regex's
+	newText := strings.ToLower(text)
+
+	// Space out anything that we shouldn't search...
+
+	// URL's
+	newText = xurls.Strict.ReplaceAllStringFunc(newText, func(toRep string) string {
+		return strings.Repeat(" ", len(toRep))
+	})
+
+	return newText
 }
 
 // NewFileMap creates a File Map, complete with pre-loaded line entries to
@@ -37,7 +55,7 @@ func NewFileMap(filename string) (*FileMap, error) {
 	fm := FileMap{
 		Filename:  filename,
 		Text:      buf,
-		CheckText: strings.ToLower(buf),
+		CheckText: createCheckText(buf),
 		Lines:     make([]lineEntry, 0, (len(buf)/32)+1),
 	}
 

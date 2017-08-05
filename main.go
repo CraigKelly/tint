@@ -23,8 +23,8 @@ func processFile(filename string, report chan *Warning, maxWarnings int) int {
 
 	// We launch a goroutine per list of TextChecks and write any warnings to
 	// our gather channel. Then we pump from the gather channel to our caller.
-	// There are many things we go do as we gather the warnings, but currently
-	// this is only used to handle the max warnings per file feature.
+	// There are many things we COULD do as we gather the warnings, but
+	// currently this is only used to handle the max warnings per file feature.
 	wg := sync.WaitGroup{}
 	gather := make(chan *Warning, 64)
 
