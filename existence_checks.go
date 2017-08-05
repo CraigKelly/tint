@@ -171,7 +171,7 @@ func ShouldNotExist() []TextCheck {
 
 		// Malapropisms
 		&BadTerm{"the infinitesimal universe", "'%s' is a malapropism"},
-		&BadTerm{"a serial experienc", "'%s' is a malapropism"},
+		&BadTerm{"a serial experience", "'%s' is a malapropism"},
 		&BadTerm{"attack my voracity", "'%s' is a malapropism"},
 
 		// Mixed metaphor: bottle necks

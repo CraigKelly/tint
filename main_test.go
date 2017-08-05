@@ -24,7 +24,7 @@ func benchmarkFile(fn string, b *testing.B) {
 	}
 
 	// All this counting and module-level var storage is to insure that the
-	// optmizer doesn't eliminate anything
+	// optimizer doesn't eliminate anything
 	warnings = warnCount
 	returned = retCount
 

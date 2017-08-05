@@ -30,7 +30,7 @@ func ShouldNotRedundant() []TextCheck {
 		&BadTerm{"upc codes", "'%s' is redundant. Just use UPC"},
 
 		&BadTerm{"audible to the ear", "'%s' is redundant. Just use audible"},
-		&BadTerm{"rectangular in shape", "'%s' is redundant. Just use rectanglar"},
+		&BadTerm{"rectangular in shape", "'%s' is redundant. Just use rectangular"},
 
 		&BadTerm{"adequate enough", "'%s' is redundant."},
 		&BadTerm{"self-admitted", "'%s' is redundant."},
