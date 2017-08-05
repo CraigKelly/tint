@@ -35,3 +35,12 @@ tool. See `pipeline.yaml` for details.
 For instance, if you have Python 3 with colorclass installed (you can install
 colorclass with pip: `pip3 install --user colorclass`), then you can put tintc
 in your path and the default output will be colored.
+
+## Hacking
+
+This project is so small, I'm using it to play with build tools, so...
+
+* Build with [dmk](https://github.com/CraigKelly/dmk)
+* If you need to clean, use the `./script/clean`
+* Using the new [go dep](https://github.com/golang/dep) for dependency management (though there are very few deps)
+
