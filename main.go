@@ -12,7 +12,8 @@ import (
 
 // TODO: thorough spell checking run
 
-// TODO: in our preprocess run, we should blank out sections that we shouldn't check, like URL's
+// TODO: in our preprocess run, we should blank out sections that we shouldn't
+//       check, like URL's. Maybe also strings in quotes?
 
 // TODO: atom editor plugin for linter (should work with our JSON mode)
 
