@@ -37,4 +37,3 @@ bench:
         - .build
     outputs:
         - .bench
-

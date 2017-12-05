@@ -1,6 +1,6 @@
 #!/bin/bash
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR/.."
+cd "$SCRIPT_DIR/.." || echo "Could not cd to script dir parent: you need to check this"
 
 go test -bench=. -benchtime=10s -benchmem

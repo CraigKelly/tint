@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR/.."
+cd "$SCRIPT_DIR/.." || echo "Could not cd to script parent: you need to check this"
 
 echo "go clean"
 go clean -i

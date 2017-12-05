@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$SCRIPT_DIR/.."
+cd "$SCRIPT_DIR/.." || echo "Could not cd to script parent: you need to check this"
 
 failed() {
     echo "FAILURE!"
@@ -15,10 +15,15 @@ echo "go vet"
 go vet || failed
 
 # Note that we use ! so that a grep than finds something fails
-CAP_CHECKS=$(find -maxdepth 1 -name '*.go' -print0 | xargs -0 grep -l NEEDCAPS)
+CAP_CHECKS=$(find . -maxdepth 1 -name '*.go' -print0 | xargs -0 grep -l NEEDCAPS)
+
 echo "Looking for BadTerm's with capital letters..."
+
+# Disable the warning about quoting vars since we WANT $CAP_CHECKS to be unquoted
+# shellcheck disable=SC2086
 grep --color=always -HEn -e 'BadTerm\{\".*[A-Z].*\",' -e 'cliche\(\".*[A-Z].*\"\)' ${CAP_CHECKS}
 GREP_RET=$?
+
 if [ "$GREP_RET" -eq "0" ]; then
     echo "BadTerm search terms should be all lower case"
     failed
