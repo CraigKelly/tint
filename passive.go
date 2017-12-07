@@ -7,10 +7,12 @@ import (
 
 // NEEDCAPS
 
+// PassiveTerm is a BadTerm with special matching for passive voice
 type PassiveTerm struct {
 	*BadTerm
 }
 
+// Match catches passive voice
 func (pt *PassiveTerm) Match(fm *FileMap) []*Warning {
 	rx := regexp.MustCompile(pt.SearchTerm)
 	found := rx.FindAllStringIndex(fm.CheckText, -1)
@@ -26,34 +28,34 @@ func (pt *PassiveTerm) Match(fm *FileMap) []*Warning {
 		}
 
 		// now find previous word
-		prev_end := loc[0] - 2
-		for prev_end >= 0 && !indexIsWordChar(fm.CheckText, prev_end) {
-			prev_end -= 1
+		prevEnd := loc[0] - 2
+		for prevEnd >= 0 && !indexIsWordChar(fm.CheckText, prevEnd) {
+			prevEnd--
 		}
-		prev_start := prev_end - 1
-		for prev_start >= 0 && indexIsWordChar(fm.CheckText, prev_start) {
-			prev_start -= 1
+		prevStart := prevEnd - 1
+		for prevStart >= 0 && indexIsWordChar(fm.CheckText, prevStart) {
+			prevStart--
 		}
-		if prev_start < 0 || prev_end < 0 {
+		if prevStart < 0 || prevEnd < 0 {
 			continue
 		}
-		prev_word := strings.TrimSpace(fm.CheckText[prev_start : prev_end+1])
-		if len(prev_word) < 2 {
+		prevWord := strings.TrimSpace(fm.CheckText[prevStart : prevEnd+1])
+		if len(prevWord) < 2 {
 			continue
 		}
 
 		// Is the previous word one we are looking for?
-		prev_bad := false
+		prevBad := false
 		verbs := []string{"am", "are", "were", "being", "is", "been", "was", "be"}
 		for _, v := range verbs {
-			if prev_word == v {
-				prev_bad = true
+			if prevWord == v {
+				prevBad = true
 				break
 			}
 		}
 
-		if prev_bad {
-			ret = append(ret, NewWarning(fm, prev_start, pt.Message, fm.Text[prev_start:loc[1]]))
+		if prevBad {
+			ret = append(ret, NewWarning(fm, prevStart, pt.Message, fm.Text[prevStart:loc[1]]))
 		}
 	}
 
@@ -64,7 +66,7 @@ func passive(secondary string) TextCheck {
 	return &PassiveTerm{&BadTerm{secondary, "'%s' appears to be in the passive voice."}}
 }
 
-// ShouldNotCliche returns a slice of BadTerm's, none of which should be in the
+// ShouldNotPassive returns a slice of PassiveTerm's, none of which should be in the
 // a text (case insensitive). See existence_checks.go for details of BadTerms.
 func ShouldNotPassive() []TextCheck {
 	return []TextCheck{

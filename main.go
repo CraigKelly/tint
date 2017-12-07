@@ -35,7 +35,7 @@ func processFile(filename string, report chan *Warning, maxWarnings int) int {
 			for _, c := range checks {
 				for _, warn := range c.Match(fm) {
 					gather <- warn
-					count += 1
+					count++
 					if maxWarnings > 0 && count >= maxWarnings {
 						// optimization: see below for actual maxWarnings work
 						return
@@ -62,7 +62,7 @@ func processFile(filename string, report chan *Warning, maxWarnings int) int {
 
 	for warn := range gather {
 		report <- warn
-		finalCount += 1
+		finalCount++
 		if maxWarnings > 0 && finalCount >= maxWarnings {
 			break
 		}
@@ -152,7 +152,7 @@ func main() {
 	written := 0
 	for warn := range output {
 		outputter(warn)
-		written += 1
+		written++
 		if *maxAllPtr > 0 && written >= *maxAllPtr {
 			verb.Printf("Maximum warnings reached (%d)\n", written)
 			break

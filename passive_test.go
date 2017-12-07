@@ -15,7 +15,7 @@ func TestSinglePassive(t *testing.T) {
 	warnCount := 0
 	for _, check := range ShouldNotPassive() {
 		for _, w := range check.Match(fm) {
-			warnCount += 1
+			warnCount++
 			t.Logf("WARN %4d: %v\n", warnCount, w)
 		}
 	}

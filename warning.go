@@ -57,18 +57,20 @@ func (a WarningDefSort) Less(i int, j int) bool {
 	return a[i].Offset < a[j].Offset
 }
 
-// JSON representation as per http://steelbrain.me/linter/types/linter-message-v2.html
+// WarningJSON conforms to http://steelbrain.me/linter/types/linter-message-v2.html
 type WarningJSON struct {
 	Location WarningLocation `json:"location"`
 	Excerpt  string          `json:"excerpt"`
 	Severity string          `json:"severity"`
 }
 
+// WarningLocation conforms to http://steelbrain.me/linter/types/linter-message-v2.html
 type WarningLocation struct {
 	File     string  `json:"file"`
 	Position [][]int `json:"position"`
 }
 
+// CreateJSON returns a warning in JSON format matching http://steelbrain.me/linter/types/linter-message-v2.html
 func (w Warning) CreateJSON() string {
 	p1 := []int{w.Row, w.Col}
 	p2 := []int{w.Row, w.Col}
