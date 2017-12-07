@@ -1,7 +1,7 @@
 tint
-.test
 .build
 .bench
+.tested
 
 # Binaries for programs and plugins
 *.exe

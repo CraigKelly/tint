@@ -3,6 +3,10 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR/.." || echo "Could not cd to script parent: you need to check this"
 
+TEST_SIG=".tested"
+
+rm -f "${TEST_SIG}"
+
 failed() {
     echo "FAILURE!"
     exit 1
@@ -33,3 +37,5 @@ fi
 
 echo "go test"
 go test -race || failed
+
+touch "${TEST_SIG}"

@@ -37,20 +37,25 @@ simple as possible (but no simpler). Here are some optimizations used:
 Currently the project is small enough that the command line program and all
 code are right here in a single `main` package.
 
-`./scripts` contains build/development scripts. `dmk` is used as the build
-tool. See `pipeline.yaml` for details.
+`./scripts` contains build/development scripts. `make` is used as the build
+tool. Running `make install` should be sufficient to test, build, and install.
+See `./Makefile` for details.
 
 `./res` contains resources used for testing.
 
 `./helper` contains wrappers around `tint` that you might find interesting.
-For instance, if you have Python 3 with colorclass installed (you can install
-colorclass with pip: `pip3 install --user colorclass`), then you can put tintc
-in your path and the default output will be prettified in your terminal.
+`make install` will create a symbolic link to tintc in `$GOPATH/bin`. However,
+you'll need Python 3 and the Python library `colorclass` installed to use it.
+(you can install colorclass with pip: `pip3 install --user colorclass`).
 
 ## Hacking
 
-This project is so small, I'm using it to play with build tools, so...
+This project uses the new [go dep](https://github.com/golang/dep) for
+dependency management (though there are few deps).  Use `make update` to update
+dependencies.
 
-* Build with [dmk](https://github.com/CraigKelly/dmk)
-* If you need to clean, use the `./script/clean`
-* Using the new [go dep](https://github.com/golang/dep) for dependency management (though there are few deps)
+`make test` runs `./script/test` which runs `go test` but also includes some
+manual tests for common errors that have cropped up in the code base.
+
+Running `make lint` will run `go fmt`, `go vet`, `golint`, and `goconst`. `make
+lint-install` will install all the lint tools that you need.
