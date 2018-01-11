@@ -35,7 +35,7 @@ else
     echo "  ...No problems found"
 fi
 
-echo "go test"
-go test -race || failed
+echo "go test - WITHOUT -race, which you should check before a release"
+go test || failed
 
 touch "${TEST_SIG}"

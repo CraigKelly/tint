@@ -9,7 +9,7 @@ TESTED=.tested
 
 build: $(BINARY)
 $(BINARY): $(SOURCES) $(TESTED) $(VERSIONOUT)
-	go build
+	go build -i
 
 install: build
 	go install
